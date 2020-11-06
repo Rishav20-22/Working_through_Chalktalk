@@ -37,6 +37,7 @@ function () {
     }];
 
 	this.render = function () {
+        
             this.xaxisspeed+=this.riverspeed
             this.xtopleft += this.xaxisspeed
             this.xtopright += this.xaxisspeed
@@ -61,7 +62,17 @@ function () {
             mLine([this.xtopright,this.ytopright],[this.xbottomright,this.ybottomright]);
             mLine([this.mast,this.ymast],[this.mast,this.ytopmast])
             this.xaxisspeed-=this.riverspeed
-        
+            
+            
+            var sketches = sk().intersectingSketches();
+            for (var i = 0 ; i < sketches.length ; i++) {
+                if (isDef(sk().onIntersect))
+                   sk().onIntersect(sketches[i]);
+                if (isDef(sketches[i].onIntersect))
+                   sketches[i].onIntersect(sk());
+                
+             }//this allows us to check if the sketches are intersecting even when the mouse is not moving
+
     }
     this.onIntersect = function(otherSketch) {
       
@@ -74,6 +85,13 @@ function () {
         {
             this.riverspeed= -(otherSketch.speed)
         }
+        if(otherSketch.label=="riverbank")
+        {
+            this.xaxisspeed=0
+            this.yaxisspeed=0
+            this.riverspeed=0
+        }
     
       }
 }  
+
